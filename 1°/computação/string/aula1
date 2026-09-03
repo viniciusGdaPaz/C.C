@@ -1,0 +1,12 @@
+#include<stdio.h>
+
+int main(){
+
+    char str[20];//19caracteres mais o \0;
+
+
+    //scanf("%s",str);
+    scanf("%[^\n]]",str);//pode gerar um erro de estouro de memória
+    printf("%s",str);
+    return 0;
+}
