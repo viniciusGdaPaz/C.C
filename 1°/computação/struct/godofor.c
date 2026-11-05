@@ -8,6 +8,7 @@ Welcome to GDB Online.
 *******************************************************************************/
 #include <stdio.h>
 #include <string.h>
+#include<stdlib.h>
 #define MAX 100
 
 typedef struct{
@@ -30,55 +31,48 @@ void lerCandidatos(Candidatos gods[MAX], int aux){
     
 }
 
-void ordenaPoder(Candidatos gods[MAX], int aux){
-    int maisForte, i;
-    for(i=0; i<aux; i++){
-        if(gods[i].poder>gods[i+1].poder){
-            maisForte= gods[i].poder;
-        }else if(gods[i].poder == gods[i+1].poder){
-            maisForte = ordenaKills(gods,i);
-        }
+
+void tokey(char *chave, Candidatos *aux){
+    sprintf(chave,"%d %d %d %s", 100-aux->poder, 100-aux->kills, aux->mortes, aux->name);
+}
+
+int comparador(const void *a, const void *b){
+    Candidatos *c1 = (Candidatos *)a;
+    Candidatos *c2 = (Candidatos *)b;
+
+    
+    if (c1->poder != c2->poder) {
+        return c2->poder - c1->poder;
     }
+    
+    if (c1->kills != c2->kills) {
+        return c2->kills - c1->kills;
+    }
+
+    if (c1->mortes != c2->mortes) {
+        return c1->mortes - c2->mortes;
+    }
+   
+    return strcmp(c1->name, c2->name);
 }
 
-int ordenaKills(Candidatos gods[MAX], int aux){
-    int maisForte;
-    
-        if(gods[aux].kills>gods[aux+1].kills){
-            maisForte= gods[aux].kills;
-            return maisForte;
-            
-        }else if(gods[aux].kills == gods[aux+1].kills){
-             maisForte = ordenaMortes(gods,i);
-             return maisForte;
-        }
-    
+void ordena(Candidatos v[MAX], int n){
+    qsort(v, n, sizeof(Candidatos), comparador);
 }
 
-int ordenaMortes(Candidatos gods[MAX], int aux){
-    int maisForte;
-    
-        if(gods[aux].mortes>gods[aux+1].mortes){
-            maisForte= gods[aux].mortes;
-            return maisForte;
-            
-        }else if(gods[aux].mortes == gods[aux+1].mortes){
-             maisForte = ordenaMortes(gods,i);
-             return maisForte;
-        }
-    
-}
+
 
 
 void printCandidatos(Candidatos gods[MAX], int aux){
-    int i;
-    for(i=0; i<aux; i++){
-        printf("nome:%s \n", gods[i].name);
-        printf("poder:%d", gods[i].poder);
-        printf("kills:%d", gods[i].kills);
-        printf("mortes:%d\n",gods[i].mortes);
-    }
+    int i= 0;
+   
+        printf("%s\n", gods[i].name);
+      
+    
+
+
 }
+
 
 int main()
 {
@@ -86,6 +80,9 @@ int main()
     Candidatos gods[MAX];
     scanf("%d%*c", &n);
     lerCandidatos(gods, n);
+    ordena(gods,n),
+    printCandidatos(gods,n);
+   
     
     
     
